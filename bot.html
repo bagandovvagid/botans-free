@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Бот — Botans free</title>
+  <meta name="description" content="Подробнее о боте: что умеет, кому подходит и авторский демо-бот, чтобы проверить его способности.">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            night: '#0a0e1a',
+            panel: '#0f1526',
+            cyan: { DEFAULT: '#00d9ff', dim: '#00a8c6', deep: '#0b7285' },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Space Grotesk', 'Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #6eb075; }
+    /* Те же обои, что и на главной, — закреплены за экраном */
+    .wallpaper {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+      background: url('assets/tg-wallpaper.jpg') center / cover no-repeat;
+    }
+    .glow-btn { transition: box-shadow .3s ease, transform .3s ease, background-color .3s ease; }
+    .glow-btn:hover { box-shadow: 0 0 24px rgba(0,217,255,.55), 0 0 60px rgba(0,217,255,.25); transform: translateY(-2px); }
+    ::selection { background: rgba(0,217,255,.35); }
+  </style>
+</head>
+<body class="text-night font-sans antialiased">
+
+  <div class="wallpaper" aria-hidden="true"></div>
+
+  <!-- ===== ШАПКА ===== -->
+  <header class="max-w-6xl mx-auto px-5 pt-8 flex items-center justify-between gap-4">
+    <a href="index.html#services"
+       class="inline-flex items-center gap-2 bg-white/85 hover:bg-white border border-white/70 rounded-full px-4 py-2 text-sm font-medium text-slate-800 transition shadow-[0_6px_20px_rgba(23,74,44,0.12)]">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Каталог ботов
+    </a>
+    <a href="index.html" class="font-display text-xl sm:text-2xl font-bold tracking-tight">Botans <span class="text-cyan-deep">free</span></a>
+  </header>
+
+  <!-- Контент подставляется скриптом в зависимости от ?bot= в адресе -->
+  <main id="bot-page" class="max-w-3xl mx-auto px-5 py-10 sm:py-14"></main>
+
+  <footer>
+    <div class="max-w-6xl mx-auto px-5 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-700 text-sm">
+      <span class="font-display font-semibold text-slate-800">Botans <span class="text-cyan-deep">free</span></span>
+      <span>© 2026 · Разработка Telegram-ботов</span>
+    </div>
+  </footer>
+
+  <script>
+    // Контакт для заказа
+    const CONTACT_URL = 'https://t.me/botans_free';
+
+    const BOTS = {
+      archiver: {
+        title: 'Бот-архиватор',
+        hit: true,
+        icon: '<path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/>',
+        about: 'Ничего не пропадает: бот тихо сохраняет переписку и медиа, а когда сообщение удалили или отредактировали — у вас остаётся оригинал.',
+        features: [
+          'Сохраняет сообщения до того, как их удалили или отредактировали',
+          'Сохраняет исчезающие фото и голосовые «с одним просмотром»',
+          'Ведёт полный архив медиа: фото, видео, голосовые, документы',
+          'Хранит историю диалогов с поиском по дате и ключевым словам',
+          'Присылает уведомления об удалённых и изменённых сообщениях',
+          'Выгружает архив в удобном формате по запросу',
+          'Работает и в личных чатах, и в группах',
+        ],
+        forWhom: ['Личные переписки', 'Админы чатов и групп', 'Рабочие диалоги'],
+        demoText: 'Специально для этого сценария работает авторский демо-бот: напишите ему, удалите сообщение — и посмотрите, как он вернёт его из архива.',
+        // Готовый авторский бот для проверки
+        demo: 'https://t.me/vaga2000_bot',
+        news: 'Следите за новостями бота-архиватора в телеграм-канале <a href="https://t.me/Vaga_botan" target="_blank" rel="noopener" class="text-cyan-deep font-semibold hover:underline">@Vaga_botan</a>',
+        examples: {
+          intro: 'Живые примеры из работы авторского бота — именно так может работать и ваш:',
+          items: [
+            {
+              src: 'assets/archiver-deleted.png',
+              alt: 'Уведомление бота об удалённом сообщении с восстановленным текстом и фото',
+              caption: 'Собеседник удалил сообщение через пару секунд после отправки — бот тут же прислал уведомление и вернул всё: текст, фото, время отправки и удаления.',
+            },
+            {
+              src: 'assets/archiver-edited.png',
+              alt: 'Уведомление бота об отредактированном сообщении: текст до и после',
+              caption: 'Сообщение отредактировали — бот показывает «было» и «стало». Цена в переписке вдруг выросла с 3 000 до 10 000 долларов? У вас есть доказательство.',
+            },
+            {
+              src: 'assets/archiver-selfdestruct.jpg',
+              alt: 'Исчезающее фото с одним просмотром в чате',
+              caption: 'Собеседник прислал фото «с одним просмотром» — то самое, что исчезает сразу после открытия. Бот перехватывает его до того, как оно самоуничтожится.',
+            },
+            {
+              src: 'assets/archiver-selfdestruct-saved.jpg',
+              alt: 'Уведомление бота о сохранённом исчезающем сообщении',
+              caption: 'А вот и результат: «🔥 Исчезающее сообщение сохранено». Фото осталось у вас в полном качестве — как будто оно и не было одноразовым. Так же бот сохраняет и исчезающие голосовые.',
+            },
+          ],
+        },
+      },
+      ai: {
+        title: 'ИИ-бот',
+        icon: '<rect x="4" y="7" width="16" height="12" rx="3"/><circle cx="9" cy="13" r="1.2" fill="#0b7285" stroke="none"/><circle cx="15" cy="13" r="1.2" fill="#0b7285" stroke="none"/><path d="M12 7V4M8 4h8"/>',
+        about: 'Консультант, который не спит: отвечает клиентам мгновенно и говорит на языке вашего бизнеса.',
+        features: [
+          'Отвечает на вопросы клиентов 24/7 на базе ChatGPT',
+          'Обучается на ваших материалах: прайсы, FAQ, регламенты',
+          'Понимает свободные формулировки, а не только команды',
+          'Передаёт сложные вопросы живому менеджеру',
+          'Держит фирменный тон бренда в каждом ответе',
+          'Собирает контакты заинтересованных клиентов',
+        ],
+        forWhom: ['Интернет-магазины', 'Сфера услуг', 'Онлайн-школы', 'Эксперты и блогеры'],
+      },
+      shop: {
+        title: 'Бот-магазин',
+        icon: '<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.5a1 1 0 0 0 1 .8h9.7a1 1 0 0 0 1-.8L21 8H6"/>',
+        about: 'Полноценный магазин внутри Telegram: от витрины до оплаты — без сайта и приложения.',
+        features: [
+          'Каталог товаров с фото, ценами и категориями',
+          'Корзина и оформление заказа прямо в чате',
+          'Приём оплаты: Telegram Payments или ЮKassa',
+          'Уведомления: вам — о новых заказах, клиенту — о статусе',
+          'Промокоды, скидки и учёт остатков',
+          'История заказов — удобно для повторных покупок',
+        ],
+        forWhom: ['Интернет-магазины', 'Локальные бренды', 'Продажи через каналы'],
+      },
+      support: {
+        title: 'Бот поддержки',
+        icon: '<path d="M21 12a8 8 0 1 0-3.1 6.3L21 19l-.9-3.2A8 8 0 0 0 21 12z"/><path d="M9 11h6M9 14h4"/>',
+        about: 'Первая линия поддержки, которая отвечает мгновенно и ничего не теряет.',
+        features: [
+          'Мгновенно отвечает на частые вопросы по базе FAQ',
+          'Принимает заявки с нужными полями: имя, контакт, суть вопроса',
+          'Направляет обращения на нужного менеджера',
+          'Ведёт тикеты и статусы — ни одно обращение не потеряется',
+          'Показывает статистику: темы, нагрузка, время ответа',
+          'Работает круглосуточно, без выходных и очередей',
+        ],
+        forWhom: ['Онлайн-сервисы', 'Магазины', 'Компании с потоком обращений'],
+      },
+      booking: {
+        title: 'Бот записи',
+        icon: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4"/>',
+        about: 'Клиенты записываются сами — без звонков, ожиданий и «перезвоните позже».',
+        features: [
+          'Запись на услугу в пару нажатий, без звонков',
+          'Календарь свободных окон в реальном времени',
+          'Напоминает клиентам о визите — меньше неявок',
+          'Перенос и отмена записи прямо в чате',
+          'Уведомляет администратора о каждой новой записи',
+          'Учитывает нескольких специалистов и разные услуги',
+        ],
+        forWhom: ['Салоны красоты', 'Автосервисы', 'Клиники', 'Частные мастера'],
+      },
+      broadcast: {
+        title: 'Бот рассылок',
+        icon: '<path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/>',
+        about: 'Доносит нужное сообщение до нужных людей — вовремя и без ручной работы.',
+        features: [
+          'Массовые рассылки по всей базе подписчиков',
+          'Сегментация: разные сообщения разным группам',
+          'Автоворонки: цепочки сообщений по расписанию',
+          'Отложенные публикации по планировщику',
+          'Статистика: доставка, клики по кнопкам',
+          'Кнопки, картинки и ссылки в каждом сообщении',
+        ],
+        forWhom: ['Каналы и сообщества', 'Онлайн-школы', 'Магазины и акции'],
+      },
+      paywall: {
+        title: 'Продажа доступа к каналу',
+        icon: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.2" fill="#0b7285" stroke="none"/>',
+        about: 'Продаёт подписку на закрытый канал и сам следит, чтобы доступ был только у тех, кто оплатил. Подходит онлайн-школам и авторам платных каналов.',
+        features: [
+          'Принимает оплату за подписку прямо в Telegram',
+          'Автоматически выдаёт доступ в закрытый канал после оплаты',
+          'Напоминает участникам о продлении заранее',
+          'Сам отключает тех, кто не продлил подписку',
+          'Ведёт учёт оплат и подписчиков',
+        ],
+        forWhom: ['Онлайн-школы', 'Платные каналы', 'Клубы по подписке'],
+      },
+      moderator: {
+        title: 'Модератор чата',
+        icon: '<path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5"/>',
+        about: 'Держит порядок в чате круглосуточно: спам исчезает, нарушители получают ограничения — без вашего участия.',
+        features: [
+          'Блокирует спам и рекламу автоматически',
+          'Следит за соблюдением правил чата',
+          'Выдаёт предупреждения и ограничивает нарушителей',
+          'Встречает новичков и показывает им правила',
+          'Настраивается под правила именно вашего сообщества',
+        ],
+        forWhom: ['Большие чаты', 'Чаты при каналах', 'Комьюнити брендов'],
+      },
+      community: {
+        title: 'Геймификация сообщества',
+        icon: '<path d="M12 3l2.7 5.47 6.04.88-4.37 4.26 1.03 6.01L12 16.77l-5.4 2.85 1.03-6.01L3.26 9.35l6.04-.88L12 3z"/>',
+        about: 'Превращает чат в игру: участники зарабатывают баллы, растут в уровнях и соревнуются в рейтинге — активность растёт сама.',
+        features: [
+          'Начисляет баллы за сообщения и активность',
+          'Ведёт личный профиль каждого участника',
+          'Показывает уровни, рейтинги и таблицу лидеров',
+          'Выдаёт награды и звания самым активным',
+          'Правила игры настраиваются под ваше сообщество',
+        ],
+        forWhom: ['Чаты при каналах', 'Игровые сообщества', 'Учебные группы'],
+      },
+      monitoring: {
+        title: 'Мониторинг и сбор данных',
+        icon: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h1.5l1-1.8 2 3.6 1-1.8H15"/>',
+        about: 'Следит за нужными сайтами вместо вас и присылает только то, что подходит под ваши критерии.',
+        features: [
+          'Собирает объявления по вашим критериям: марка, модель, цена',
+          'Работает с Авито и другими площадками',
+          'Отслеживает изменения цен и новые предложения',
+          'Уведомляет в реальном времени',
+          'Отсеивает дубли и неподходящие варианты',
+        ],
+        forWhom: ['Подбор авто', 'Недвижимость', 'Поиск выгодных предложений'],
+      },
+      docs: {
+        title: 'ИИ-обработка документов',
+        icon: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6z"/><path d="M14 3v6h6"/><path d="M9 14h6M9 17h4"/>',
+        about: 'Сфотографируйте документ — бот сам распознает данные, заполнит шаблон и подготовит готовую бумагу. Востребован у юристов и всех, кто работает с документами.',
+        features: [
+          'Распознаёт данные с фото документа',
+          'Заполняет ваши шаблоны без ручного ввода',
+          'Формирует готовые заявки и документы',
+          'Работает с вашими формами: договоры, заявления, анкеты',
+          'Экономит часы рутинной работы с бумагами',
+        ],
+        forWhom: ['Юристы', 'Кадровые службы', 'Агентства услуг'],
+      },
+      miniapp: {
+        title: 'Mini App — приложение в Telegram',
+        icon: '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/><circle cx="10.5" cy="8" r=".9" fill="#0b7285" stroke="none"/><circle cx="13.5" cy="8" r=".9" fill="#0b7285" stroke="none"/><circle cx="10.5" cy="11" r=".9" fill="#0b7285" stroke="none"/><circle cx="13.5" cy="11" r=".9" fill="#0b7285" stroke="none"/>',
+        about: 'Полноценное приложение, которое открывается прямо в Telegram: без установки и регистрации — удобнее обычного бота.',
+        features: [
+          'Визуальный интерфейс: кнопки, карточки, каталоги',
+          'Открывается мгновенно, работает без установки',
+          'Любая логика под вашу задачу: магазин, запись, личный кабинет',
+          'Выглядит и ощущается как настоящее приложение',
+          'Работает и на телефоне, и на компьютере',
+        ],
+        forWhom: ['Интернет-магазины', 'Сервисы записи', 'Программы лояльности'],
+      },
+    };
+
+    const slug = new URLSearchParams(location.search).get('bot');
+    const bot = BOTS[slug];
+    const page = document.getElementById('bot-page');
+
+    if (!bot) {
+      document.title = 'Бот не найден — Botans free';
+      page.innerHTML = `
+        <section class="bg-white/95 border border-white/70 rounded-3xl p-8 sm:p-12 text-center shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
+          <h1 class="font-display font-bold text-2xl sm:text-4xl mb-4">Такой бот не найден</h1>
+          <p class="text-slate-600 mb-8">Возможно, ссылка устарела. Загляните в каталог — там все актуальные сценарии.</p>
+          <a href="index.html#services" class="glow-btn inline-block bg-cyan text-night font-semibold px-8 py-4 rounded-xl">Открыть каталог</a>
+        </section>`;
+    } else {
+      document.title = bot.title + ' — Botans free';
+
+      const features = bot.features.map(f => `
+        <li class="flex items-start gap-3">
+          <svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span class="text-slate-700 text-sm sm:text-base leading-relaxed">${f}</span>
+        </li>`).join('');
+
+      // Если авторский бот готов (есть bot.demo) — кнопка, иначе «в разработке»
+      const demoSection = bot.demo ? `
+        <section class="mt-6 bg-white/95 border-2 border-cyan-dim/60 rounded-3xl p-7 sm:p-10 text-center shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
+          <h2 class="font-display font-bold text-xl sm:text-3xl mb-3">Проверьте его способности</h2>
+          <p class="text-slate-600 mb-7 max-w-xl mx-auto">${bot.demoText}</p>
+          <a href="${bot.demo}" target="_blank" rel="noopener"
+             class="glow-btn inline-flex items-center gap-3 bg-cyan text-night font-semibold text-base sm:text-lg px-8 py-4 rounded-xl">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.94 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.64 6.8-1.63 7.68c-.12.55-.45.68-.9.42l-2.5-1.84-1.2 1.16c-.14.13-.25.24-.5.24l.17-2.52 4.6-4.15c.2-.18-.04-.28-.31-.1l-5.68 3.57-2.45-.76c-.53-.17-.54-.53.11-.79l9.57-3.69c.44-.16.83.11.72.78z"/></svg>
+            Открыть демо-бота
+          </a>
+          <p class="text-slate-500 text-xs sm:text-sm mt-5">Авторский демо-бот · бесплатно, без регистрации</p>
+          ${bot.news ? `<p class="text-slate-700 text-sm sm:text-base mt-6 pt-5 border-t border-slate-200">${bot.news}</p>` : ''}
+        </section>` : `
+        <section class="mt-6 bg-white/80 border-2 border-dashed border-cyan-dim/50 rounded-3xl p-7 sm:p-10 text-center shadow-[0_18px_60px_rgba(23,74,44,0.18)]">
+          <h2 class="font-display font-bold text-xl sm:text-3xl mb-3">Проверьте его способности</h2>
+          <p class="text-slate-600 max-w-xl mx-auto">Авторский бот в разработке...</p>
+        </section>`;
+
+      // Скриншоты реальной работы бота, если есть
+      const examplesSection = bot.examples ? `
+        <section class="mt-6 bg-white/95 border border-white/70 rounded-3xl p-7 sm:p-10 shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
+          <h2 class="font-display font-bold text-xl sm:text-3xl mb-3 text-center">Так может работать ваш бот</h2>
+          <p class="text-slate-600 text-center max-w-xl mx-auto mb-7">${bot.examples.intro}</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 items-start">
+            ${bot.examples.items.map(ex => `
+            <figure class="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden">
+              <img src="${ex.src}" alt="${ex.alt}" loading="lazy" class="w-full h-auto">
+              <figcaption class="text-slate-600 text-sm leading-relaxed px-4 py-3">${ex.caption}</figcaption>
+            </figure>`).join('')}
+          </div>
+        </section>` : '';
+
+      page.innerHTML = `
+        <!-- Карточка бота -->
+        <section class="bg-white/95 border border-white/70 rounded-3xl p-7 sm:p-10 shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
+          <div class="flex items-center gap-4 mb-5">
+            <div class="w-14 h-14 rounded-2xl bg-cyan/15 flex items-center justify-center shrink-0">
+              <svg class="w-7 h-7" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">${bot.icon}</svg>
+            </div>
+            <h1 class="font-display font-bold text-2xl sm:text-4xl tracking-tight">${bot.title}${bot.hit ? ' <span class="align-middle ml-1 inline-block bg-cyan text-night text-xs font-bold px-3 py-1 rounded-full">Хит</span>' : ''}</h1>
+          </div>
+          <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-6">${bot.about}</p>
+
+          <h2 class="font-display font-semibold text-xl sm:text-2xl mt-3 mb-4">Что умеет</h2>
+          <ul class="space-y-3">${features}</ul>
+          ${bot.forWhom ? `
+          <h2 class="font-display font-semibold text-xl sm:text-2xl mt-9 mb-4">Кому подходит</h2>
+          <div class="flex flex-wrap gap-2">${bot.forWhom.map(w => `<span class="bg-cyan/10 border border-cyan-dim/40 text-slate-700 text-sm rounded-full px-4 py-1.5">${w}</span>`).join('')}</div>` : ''}
+        </section>
+
+        <!-- Примеры работы -->
+        ${examplesSection}
+
+        <!-- Авторский демо-бот -->
+        ${demoSection}
+
+        <!-- Заказ -->
+        <section class="mt-6 bg-white rounded-3xl rounded-bl-lg px-6 py-9 sm:px-10 sm:py-11 text-center shadow-[0_18px_60px_rgba(23,74,44,0.30)]">
+          <h2 class="font-display font-bold text-xl sm:text-3xl mb-3">Нужен такой бот под вашу задачу?</h2>
+          <p class="text-slate-600 mb-7">Напишите — обсудим сценарий, предложу вариант и назову цену.</p>
+          <a href="${CONTACT_URL}" target="_blank" rel="noopener"
+             class="glow-btn inline-flex items-center gap-3 bg-cyan text-night font-semibold px-8 py-4 rounded-xl">Обсудить проект</a>
+        </section>
+
+        <p class="text-center text-slate-800 text-sm mt-10">Любые ваши правки учтутся</p>
+      `;
+    }
+  </script>
+
+  <script src="assets/tg.js"></script>
+</body>
+</html>

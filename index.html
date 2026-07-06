@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Botans free — Telegram-боты под ключ</title>
+  <meta name="description" content="Разработка Telegram-ботов под ключ: боты-архиваторы, ИИ-боты, магазины, запись, рассылки. Кастомные решения, которые не умеют конструкторы.">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            night: '#0a0e1a',
+            panel: '#0f1526',
+            cyan: { DEFAULT: '#00d9ff', dim: '#00a8c6', deep: '#0b7285' },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Space Grotesk', 'Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #6eb075; }
+    /* Обои одним куском, без нарезки и повторов — закреплены за экраном,
+       как в чатах Telegram: контент скользит поверх, стыков нет вообще */
+    .wallpaper {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+      background: url('assets/tg-wallpaper.jpg') center / cover no-repeat;
+    }
+    .glow-btn { transition: box-shadow .3s ease, transform .3s ease, background-color .3s ease; }
+    .glow-btn:hover { box-shadow: 0 0 24px rgba(0,217,255,.55), 0 0 60px rgba(0,217,255,.25); transform: translateY(-2px); }
+    .card { transition: border-color .3s ease, transform .3s ease, box-shadow .3s ease; }
+    .card:hover { border-color: rgba(0,168,198,.65); transform: translateY(-4px); box-shadow: 0 14px 38px rgba(23,74,44,.24); }
+    ::selection { background: rgba(0,217,255,.35); }
+  </style>
+</head>
+<body class="text-night font-sans antialiased">
+
+  <div class="wallpaper" aria-hidden="true"></div>
+
+  <!-- ===== HERO ===== -->
+  <header class="relative overflow-hidden">
+    <div class="relative max-w-6xl mx-auto px-5 lg:flex lg:items-end lg:justify-between lg:gap-12">
+      <!-- Текст -->
+      <div class="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left pt-16 sm:pt-24 lg:pt-28 lg:pb-28">
+        <div class="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-8">
+          Botans <span class="text-cyan-deep">free</span>
+        </div>
+        <h1 class="font-display font-bold text-3xl sm:text-5xl lg:text-6xl leading-tight tracking-tight mb-6">
+          Telegram-боты под ключ<br class="hidden sm:block">
+          <span class="text-cyan-deep">для вашего бизнеса</span>
+        </h1>
+        <p class="text-slate-800 text-base sm:text-xl max-w-2xl mx-auto lg:mx-0 mb-10">
+          От простого FAQ до кастомных решений, которые не умеют конструкторы
+        </p>
+        <a href="#contact" class="glow-btn inline-block bg-cyan text-night font-semibold text-base sm:text-lg px-8 py-4 rounded-xl shadow-[0_10px_30px_rgba(23,74,44,0.25)]">
+          Обсудить проект
+        </a>
+      </div>
+
+      <!-- BotFather — крёстный отец всех ботов -->
+      <div class="relative flex items-end justify-center lg:justify-end mt-14 lg:mt-0 shrink-0">
+        <img src="assets/botfather-hd.png" alt="Робот BotFather со смартфоном"
+             class="relative h-72 sm:h-80 lg:h-[26rem] w-auto drop-shadow-[0_18px_36px_rgba(20,60,35,0.28)]">
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== КАТАЛОГ УСЛУГ ===== -->
+  <section id="services" class="max-w-6xl mx-auto px-5 py-16 sm:py-24">
+    <h2 class="font-display font-bold text-2xl sm:text-4xl text-center mb-3">Каталог ботов</h2>
+    <p class="text-slate-800 text-center mb-5">Выберите готовый сценарий — или соберём под вашу задачу</p>
+    <div class="text-center mb-12 sm:mb-16">
+      <span class="inline-flex flex-wrap items-baseline justify-center gap-x-2 gap-y-1 bg-white/75 border border-white/70 rounded-full px-5 py-2 shadow-[0_6px_20px_rgba(23,74,44,0.15)]">
+        <span class="text-slate-600 text-sm">Мелкие задачи —</span>
+        <span class="text-cyan-deep font-semibold">от 500 ₽</span>
+        <span class="text-slate-600 text-sm">· боты под ключ —</span>
+        <span class="text-cyan-deep font-semibold">от 2 500 ₽</span>
+      </span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+
+      <!-- Флагман: бот-архиватор -->
+      <a href="bot.html?bot=archiver" class="card relative block bg-white/95 border-2 border-cyan-dim/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <span class="absolute -top-3 right-5 bg-cyan text-night text-xs font-bold px-3 py-1 rounded-full">Хит</span>
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8M1 3h22v5H1zM10 12h4"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Бот-архиватор</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Восстановление удалённых сообщений, архив медиа, история диалогов</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Возвращает удалённые сообщения</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Архив фото, видео и голосовых</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Поиск по истории диалогов</span></li>
+        </ul>
+      </a>
+
+      <!-- ИИ-бот -->
+      <a href="bot.html?bot=ai" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="12" rx="3"/><circle cx="9" cy="13" r="1.2" fill="#0b7285" stroke="none"/><circle cx="15" cy="13" r="1.2" fill="#0b7285" stroke="none"/><path d="M12 7V4M8 4h8"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">ИИ-бот</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Ответы на базе ChatGPT, консультации клиентов 24/7</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Отвечает клиентам круглосуточно</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Обучается на ваших материалах</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Передаёт сложные вопросы менеджеру</span></li>
+        </ul>
+      </a>
+
+      <!-- Бот-магазин -->
+      <a href="bot.html?bot=shop" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.6 12.5a1 1 0 0 0 1 .8h9.7a1 1 0 0 0 1-.8L21 8H6"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Бот-магазин</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Каталог, корзина, приём оплаты — Telegram Payments или ЮKassa</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Каталог с фото и ценами</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Заказ и оплата прямо в чате</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Уведомления о заказах и статусах</span></li>
+        </ul>
+      </a>
+
+      <!-- Бот поддержки -->
+      <a href="bot.html?bot=support" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 1 0-3.1 6.3L21 19l-.9-3.2A8 8 0 0 0 21 12z"/><path d="M9 11h6M9 14h4"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Бот поддержки</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">FAQ, приём заявок, маршрутизация обращений на менеджеров</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Мгновенные ответы на частые вопросы</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Приём и учёт заявок</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Передаёт обращения менеджерам</span></li>
+        </ul>
+      </a>
+
+      <!-- Бот записи -->
+      <a href="bot.html?bot=booking" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M9 15l2 2 4-4"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Бот записи</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Онлайн-запись на услуги: салоны, автосервисы, клиники</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Запись в пару нажатий</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Календарь свободных окон</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Напоминания клиентам о визите</span></li>
+        </ul>
+      </a>
+
+      <!-- Бот рассылок -->
+      <a href="bot.html?bot=broadcast" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Бот рассылок</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Уведомления, автоворонки, сегментация аудитории</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Рассылки по базе подписчиков</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Автоворонки по расписанию</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Статистика доставки и кликов</span></li>
+        </ul>
+      </a>
+
+      <!-- Продажа доступа к каналу -->
+      <a href="bot.html?bot=paywall" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.2" fill="#0b7285" stroke="none"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Продажа доступа к каналу</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Продаёт подписку на закрытый канал и сам отключает неплательщиков</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Приём оплаты за подписку</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Автоматическая выдача доступа</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Отключение при неоплате</span></li>
+        </ul>
+      </a>
+
+      <!-- Модератор чата -->
+      <a href="bot.html?bot=moderator" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Модератор чата</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Держит порядок в чате без вашего участия</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Блокирует спам и рекламу</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Следит за правилами</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Ограничивает нарушителей</span></li>
+        </ul>
+      </a>
+
+      <!-- Геймификация сообщества -->
+      <a href="bot.html?bot=community" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.47 6.04.88-4.37 4.26 1.03 6.01L12 16.77l-5.4 2.85 1.03-6.01L3.26 9.35l6.04-.88L12 3z"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Геймификация сообщества</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Оживляет чат: участники соревнуются и остаются активными</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Личные профили и уровни</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Баллы за активность</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Рейтинги и награды</span></li>
+        </ul>
+      </a>
+
+      <!-- Мониторинг и сбор данных -->
+      <a href="bot.html?bot=monitoring" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h1.5l1-1.8 2 3.6 1-1.8H15"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Мониторинг и сбор данных</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Следит за нужными сайтами и присылает только то, что важно</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Собирает объявления по вашим критериям (Авито и другие площадки)</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Отслеживает цены и новые предложения</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Уведомляет в реальном времени</span></li>
+        </ul>
+      </a>
+
+      <!-- ИИ-обработка документов -->
+      <a href="bot.html?bot=docs" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6z"/><path d="M14 3v6h6"/><path d="M9 14h6M9 17h4"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">ИИ-обработка документов</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">По фото документа сам заполняет формы и готовит бумаги</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Распознаёт данные с фото</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Заполняет шаблоны документов</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Формирует готовые заявки</span></li>
+        </ul>
+      </a>
+
+      <!-- Mini App — приложение в Telegram -->
+      <a href="bot.html?bot=miniapp" class="card block bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-5">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/><circle cx="10.5" cy="8" r=".9" fill="#0b7285" stroke="none"/><circle cx="13.5" cy="8" r=".9" fill="#0b7285" stroke="none"/><circle cx="10.5" cy="11" r=".9" fill="#0b7285" stroke="none"/><circle cx="13.5" cy="11" r=".9" fill="#0b7285" stroke="none"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Mini App — приложение в Telegram</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Полноценное приложение внутри Telegram — удобнее обычного бота</p>
+        <ul class="mt-3 space-y-1.5 text-slate-600 text-sm leading-relaxed">
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Визуальный интерфейс: кнопки, карточки, каталоги</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Работает без установки</span></li>
+          <li class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg><span>Любая логика под вашу задачу</span></li>
+        </ul>
+      </a>
+
+    </div>
+
+    <p class="text-center text-slate-800 text-sm sm:text-base mt-10">Нажмите на отдельного бота для подробной информации о нём</p>
+  </section>
+
+  <!-- ===== ПОЧЕМУ НЕ КОНСТРУКТОР ===== -->
+  <section class="max-w-5xl mx-auto px-5 py-16 sm:py-24">
+    <h2 class="font-display font-bold text-2xl sm:text-4xl text-center mb-12 sm:mb-16">
+      Почему Botans free, <span class="text-cyan-deep">а не конструктор</span>
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+      <div class="card bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 text-center md:text-left shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-4 mx-auto md:mx-0">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Кастомная логика</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Сложные сценарии, очереди, нестандартные решения, полная кастомизация вашего бота.</p>
+      </div>
+      <div class="card bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 text-center md:text-left shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-4 mx-auto md:mx-0">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Владение кодом</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Полный контроль над проектом, любые интеграции: CRM, платёжки, API, базы данных, внешние сервисы.</p>
+      </div>
+      <div class="card bg-white/95 border border-white/70 rounded-2xl p-6 sm:p-7 text-center md:text-left shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <div class="w-12 h-12 rounded-xl bg-cyan/15 flex items-center justify-center mb-4 mx-auto md:mx-0">
+          <svg class="w-6 h-6" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.6 5.6l-6.4 6.4a1.5 1.5 0 0 0 2.1 2.1l6.4-6.4a4 4 0 0 0 5.6-5.6l-2.5 2.5-2.1-2.1 2.5-2.5z"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-lg mb-2">Поддержка после запуска</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Бот не бросается после сдачи: доработки, новые функции и помощь, когда бизнес растёт — на протяжении недели.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== КАК РАБОТАЕМ ===== -->
+  <section class="max-w-5xl mx-auto px-5 py-16 sm:py-24">
+    <h2 class="font-display font-bold text-2xl sm:text-4xl text-center mb-12 sm:mb-16">Как работаем</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="relative bg-white/95 border border-white/70 rounded-2xl p-6 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <span class="font-display text-cyan-dim/70 text-4xl font-bold">01</span>
+        <h3 class="font-display font-semibold text-lg mt-3 mb-2">Заявка</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Пишете в Telegram, коротко описываете задачу — отвечаю в течение суток.</p>
+      </div>
+      <div class="relative bg-white/95 border border-white/70 rounded-2xl p-6 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <span class="font-display text-cyan-dim/70 text-4xl font-bold">02</span>
+        <h3 class="font-display font-semibold text-lg mt-3 mb-2">ТЗ и оценка</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Фиксируем функционал, сроки и стоимость. Никаких сюрпризов в процессе.</p>
+      </div>
+      <div class="relative bg-white/95 border border-white/70 rounded-2xl p-6 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <span class="font-display text-cyan-dim/70 text-4xl font-bold">03</span>
+        <h3 class="font-display font-semibold text-lg mt-3 mb-2">Разработка</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Пишу бота, показываю промежуточные версии — вы видите прогресс.</p>
+      </div>
+      <div class="relative bg-white/95 border border-white/70 rounded-2xl p-6 shadow-[0_10px_30px_rgba(23,74,44,0.16)]">
+        <span class="font-display text-cyan-dim/70 text-4xl font-bold">04</span>
+        <h3 class="font-display font-semibold text-lg mt-3 mb-2">Запуск + поддержка</h3>
+        <p class="text-slate-600 text-sm leading-relaxed">Разворачиваю на сервере, передаю доступы и остаюсь на связи.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA + КОНТАКТ ===== -->
+  <section id="contact" class="relative overflow-hidden">
+    <div class="relative max-w-2xl mx-auto px-5 py-16 sm:py-24">
+      <!-- сообщение-пузырь, как в чате -->
+      <div class="bg-white rounded-3xl px-6 py-10 sm:px-12 sm:py-14 text-center shadow-[0_18px_60px_rgba(23,74,44,0.30)]">
+        <h2 class="font-display font-bold text-2xl sm:text-4xl mb-4">Напиши — обсудим твоего бота</h2>
+        <p class="text-slate-600 mb-10">Расскажи, какую задачу должен решать бот, — предложу вариант и назову цену.</p>
+        <a href="https://t.me/botans_free" target="_blank" rel="noopener"
+           class="glow-btn inline-flex items-center gap-3 bg-cyan text-night font-semibold text-base sm:text-lg px-8 py-4 rounded-xl">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.94 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.64 6.8-1.63 7.68c-.12.55-.45.68-.9.42l-2.5-1.84-1.2 1.16c-.14.13-.25.24-.5.24l.17-2.52 4.6-4.15c.2-.18-.04-.28-.31-.1l-5.68 3.57-2.45-.76c-.53-.17-.54-.53.11-.79l9.57-3.69c.44-.16.83.11.72.78z"/></svg>
+          Написать в Telegram
+        </a>
+        <p class="text-slate-500 text-xs sm:text-sm mt-6">Бесплатная консультация · время ответа — меньше суток</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="max-w-6xl mx-auto px-5 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-700 text-sm">
+      <span class="font-display font-semibold text-slate-800">Botans <span class="text-cyan-deep">free</span></span>
+      <span>© 2026 · Разработка Telegram-ботов</span>
+    </div>
+  </footer>
+
+  <script src="assets/tg.js"></script>
+</body>
+</html>
