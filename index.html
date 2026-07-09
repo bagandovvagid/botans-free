@@ -75,6 +75,40 @@
     .theme-toggle .tt-moon { right: 9px; color: #64748b; opacity: .75; }
     html.dark .theme-toggle .tt-sun { color: #9fb8a8; opacity: .55; }
     html.dark .theme-toggle .tt-moon { color: #7fe6a3; opacity: 1; }
+    /* ===== Тёмная тема: текст и поверхности =====
+       По правилам тёмных UI: поверхности — тёмные с зелёным оттенком обоев
+       (не чисто-чёрные), текст — не чисто-белый (~87% белого, контраст ≥ 4.5:1),
+       акценты — светлее и приглушённее, чтобы не «вибрировали» на тёмном фоне */
+    html.dark body { color: #e7eee8; }
+    html.dark .text-slate-800 { color: #dbe5dc; }
+    html.dark .text-slate-700 { color: #c2cfc5; }
+    html.dark .text-slate-600 { color: #a9b8ad; }
+    html.dark .text-slate-500 { color: #8e9d92; }
+    html.dark .text-cyan-deep { color: #4fd8ef; }
+    html.dark .text-cyan-dim\/70 { color: rgba(79,216,239,.55); }
+    html.dark svg[stroke="#0b7285"] { stroke: #4fd8ef; }
+    html.dark [fill="#0b7285"] { fill: #4fd8ef; }
+    html.dark .bg-white,
+    html.dark .bg-white\/95 { background-color: rgba(23,35,27,.92); }
+    html.dark .bg-white\/80 { background-color: rgba(23,35,27,.85); }
+    html.dark .bg-white\/85,
+    html.dark .bg-white\/75 { background-color: rgba(30,46,36,.85); }
+    html.dark .hover\:bg-white:hover,
+    html.dark .hover\:bg-white\/90:hover { background-color: rgba(40,60,47,.95); }
+    html.dark .bg-slate-50 { background-color: rgba(255,255,255,.05); }
+    html.dark .bg-cyan\/15 { background-color: rgba(79,216,239,.13); }
+    html.dark .bg-cyan\/10 { background-color: rgba(79,216,239,.09); }
+    html.dark .bg-cyan { background-color: #35cfe8; }
+    html.dark .border-white\/70 { border-color: rgba(255,255,255,.09); }
+    html.dark .border-slate-200 { border-color: rgba(255,255,255,.12); }
+    html.dark .border-cyan-dim\/70 { border-color: rgba(79,216,239,.4); }
+    html.dark .border-cyan-dim\/60 { border-color: rgba(79,216,239,.35); }
+    html.dark .border-cyan-dim\/50 { border-color: rgba(79,216,239,.3); }
+    html.dark .border-cyan-dim\/40 { border-color: rgba(79,216,239,.22); }
+    html.dark .card:hover { border-color: rgba(79,216,239,.5); box-shadow: 0 14px 38px rgba(0,0,0,.5); }
+    html.dark .glow-btn:hover { box-shadow: 0 0 24px rgba(79,216,239,.4), 0 0 60px rgba(79,216,239,.18); }
+    /* Светлые скриншоты в тёмной теме слегка приглушаем, чтобы не слепили */
+    html.dark figure img { filter: brightness(.85); }
     @media (prefers-reduced-motion: reduce) {
       body, .wallpaper-dark, .theme-toggle, .theme-toggle .tt-thumb { transition: none; }
     }
