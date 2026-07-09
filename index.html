@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Botans free — Telegram-боты под ключ</title>
   <meta name="description" content="Разработка Telegram-ботов под ключ: боты-архиваторы, ИИ-боты, магазины, запись, рассылки. Кастомные решения, которые не умеют конструкторы.">
+  <meta name="theme-color" content="#6eb075">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="assets/theme.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,14 +30,53 @@
     }
   </script>
   <style>
-    body { background-color: #6eb075; }
+    body { background-color: #6eb075; transition: background-color .5s ease; }
+    html.dark body { background-color: #101b13; }
     /* Обои одним куском, без нарезки и повторов — закреплены за экраном,
-       как в чатах Telegram: контент скользит поверх, стыков нет вообще */
+       как в чатах Telegram: контент скользит поверх, стыков нет вообще.
+       Два слоя: светлые и тёмные — переключение темы меняет только их */
     .wallpaper {
       position: fixed;
       inset: 0;
       z-index: -10;
-      background: url('assets/tg-wallpaper.jpg') center / cover no-repeat;
+      background: center / cover no-repeat;
+    }
+    html:not(.dark) .wallpaper-light,
+    html.wp-armed .wallpaper-light { background-image: url('assets/tg-wallpaper.jpg'); }
+    .wallpaper-dark { z-index: -9; opacity: 0; transition: opacity .6s ease; }
+    html.dark .wallpaper-dark,
+    html.wp-armed .wallpaper-dark { background-image: url('assets/wallpaper_for_site_black.png'); }
+    html.dark .wallpaper-dark { opacity: 1; }
+    /* Переключатель темы: ползунок с солнцем и луной */
+    .theme-toggle {
+      width: 74px; height: 38px; flex: none;
+      border-radius: 9999px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,255,255,.75);
+      box-shadow: 0 6px 20px rgba(23,74,44,.16);
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color .45s ease, border-color .45s ease, box-shadow .3s ease, transform .3s ease;
+    }
+    .theme-toggle:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(23,74,44,.24); }
+    .theme-toggle:focus-visible { outline: 2px solid #00a8c6; outline-offset: 3px; }
+    html.dark .theme-toggle { background: rgba(12,20,14,.72); border-color: rgba(127,230,163,.25); box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+    .theme-toggle .tt-thumb {
+      position: absolute; top: 3px; left: 3px;
+      width: 30px; height: 30px; border-radius: 9999px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(20,40,30,.35);
+      transition: transform .45s cubic-bezier(.3,1.35,.45,1), background-color .45s ease;
+    }
+    html.dark .theme-toggle .tt-thumb { transform: translateX(36px); background: #16281c; box-shadow: 0 2px 10px rgba(0,0,0,.55); }
+    .theme-toggle .tt-icon { position: absolute; top: 50%; margin-top: -9px; width: 18px; height: 18px; pointer-events: none; transition: color .45s ease, opacity .45s ease; }
+    .theme-toggle .tt-sun { left: 9px; color: #d97706; }
+    .theme-toggle .tt-moon { right: 9px; color: #64748b; opacity: .75; }
+    html.dark .theme-toggle .tt-sun { color: #9fb8a8; opacity: .55; }
+    html.dark .theme-toggle .tt-moon { color: #7fe6a3; opacity: 1; }
+    @media (prefers-reduced-motion: reduce) {
+      body, .wallpaper-dark, .theme-toggle, .theme-toggle .tt-thumb { transition: none; }
     }
     .glow-btn { transition: box-shadow .3s ease, transform .3s ease, background-color .3s ease; }
     .glow-btn:hover { box-shadow: 0 0 24px rgba(0,217,255,.55), 0 0 60px rgba(0,217,255,.25); transform: translateY(-2px); }
@@ -48,11 +89,20 @@
 </head>
 <body class="text-night font-sans antialiased">
 
-  <div class="wallpaper" aria-hidden="true"></div>
+  <div class="wallpaper wallpaper-light" aria-hidden="true"></div>
+  <div class="wallpaper wallpaper-dark" aria-hidden="true"></div>
 
   <!-- ===== HERO ===== -->
   <header class="relative overflow-hidden">
     <div class="relative max-w-6xl mx-auto px-5 lg:flex lg:items-end lg:justify-between lg:gap-12">
+
+      <!-- Переключатель темы: светлые/тёмные обои -->
+      <button id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Переключить тему"
+              class="theme-toggle absolute top-5 right-5 z-10">
+        <span class="tt-thumb" aria-hidden="true"></span>
+        <svg class="tt-icon tt-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="tt-icon tt-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
       <!-- Текст -->
       <div class="max-w-2xl mx-auto lg:mx-0 text-center lg:text-left pt-16 sm:pt-24 lg:pt-28 lg:pb-28">
         <div class="font-display text-2xl sm:text-3xl font-bold tracking-tight mb-8">

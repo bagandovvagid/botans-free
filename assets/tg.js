@@ -21,9 +21,24 @@
   // Длинную страницу удобнее скроллить, если свайп вниз не закрывает приложение
   try { tg.disableVerticalSwipes && tg.disableVerticalSwipes(); } catch (e) {}
 
-  // Цвет шапки и фона под оформление сайта (зелёные «обои» Telegram-стиля)
-  try { tg.setHeaderColor && tg.setHeaderColor('#6eb075'); } catch (e) {}
-  try { tg.setBackgroundColor && tg.setBackgroundColor('#6eb075'); } catch (e) {}
+  // Цвет шапки и фона под текущую тему сайта: светлые или тёмные обои
+  function syncTelegramColors() {
+    var dark = document.documentElement.classList.contains('dark');
+    var color = dark ? '#101b13' : '#6eb075';
+    try { tg.setHeaderColor && tg.setHeaderColor(color); } catch (e) {}
+    try { tg.setBackgroundColor && tg.setBackgroundColor(color); } catch (e) {}
+  }
+  syncTelegramColors();
+  document.addEventListener('bf:themechange', syncTelegramColors);
+
+  // Пользователь сменил тему в самом Telegram: если тема сайта вручную
+  // не выбиралась — следуем за Telegram
+  try {
+    tg.onEvent && tg.onEvent('themeChanged', function () {
+      var t = window.siteTheme;
+      if (t && !t.saved()) t.apply(tg.colorScheme === 'dark');
+    });
+  } catch (e) {}
 
   // Ссылки на Telegram (t.me) открываем нативно — внутри самого Telegram,
   // а не во встроенном браузере. Работает и для ссылок, добавленных скриптом,
