@@ -4,3 +4,13 @@
 
 # Внутренние документы — не публикуем на сайте
 ЦЕНЫ.md
+
+# support-bot: секреты и локальные данные
+support-bot/.env
+support-bot/venv/
+support-bot/__pycache__/
+support-bot/**/__pycache__/
+support-bot/.DS_Store
+
+# Claude Code локальные настройки
+.claude/

@@ -151,8 +151,9 @@
   </footer>
 
   <script>
-    // Контакт для заказа
+    // Контакты для заказа
     const CONTACT_URL = 'https://t.me/botans_free';
+    const BOT_URL = 'https://t.me/botansfree_bot';
 
     const BOTS = {
       archiver: {
@@ -430,9 +431,22 @@
         <!-- Заказ -->
         <section class="mt-6 bg-white rounded-3xl rounded-bl-lg px-6 py-9 sm:px-10 sm:py-11 text-center shadow-[0_18px_60px_rgba(23,74,44,0.30)]">
           <h2 class="font-display font-bold text-xl sm:text-3xl mb-3">Нужен такой бот под вашу задачу?</h2>
-          <p class="text-slate-600 mb-7">Напишите — обсудим сценарий, предложу вариант и назову цену.</p>
-          <a href="${CONTACT_URL}" target="_blank" rel="noopener"
-             class="glow-btn inline-flex items-center gap-3 bg-cyan text-night font-semibold px-8 py-4 rounded-xl">Обсудить проект</a>
+          <p class="text-slate-600 mb-7">Два способа на связь — выберите, что подходит задаче:</p>
+
+          <div class="grid sm:grid-cols-2 gap-4 text-left">
+            <div class="border border-slate-200 rounded-2xl p-5 flex flex-col">
+              <h3 class="font-display font-semibold text-base mb-1.5">🤖 Бот @botansfree_bot</h3>
+              <p class="text-slate-600 text-sm mb-5 flex-1">Быстрые ответы на частые вопросы и ориентир по цене — сразу, без ожидания.</p>
+              <a href="${BOT_URL}" target="_blank" rel="noopener"
+                 class="glow-btn inline-flex items-center justify-center gap-2 bg-cyan text-night font-semibold text-sm px-5 py-3 rounded-xl">Написать боту</a>
+            </div>
+            <div class="border border-slate-200 rounded-2xl p-5 flex flex-col">
+              <h3 class="font-display font-semibold text-base mb-1.5">🧑‍💻 Эксперт @botans_free</h3>
+              <p class="text-slate-600 text-sm mb-5 flex-1">Для персональных и серьёзных вопросов — обсудим сценарий и детали лично.</p>
+              <a href="${CONTACT_URL}" target="_blank" rel="noopener"
+                 class="glow-btn inline-flex items-center justify-center gap-2 bg-white border border-cyan-dim/60 text-night font-semibold text-sm px-5 py-3 rounded-xl">Написать эксперту</a>
+            </div>
+          </div>
         </section>
 
         <p class="text-center text-slate-800 text-sm mt-10">Любые ваши правки учтутся</p>
