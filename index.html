@@ -133,7 +133,7 @@
 
       <!-- Переключатель темы: светлые/тёмные обои -->
       <button id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Переключить тему"
-              class="theme-toggle absolute top-5 right-5 z-10">
+              class="theme-toggle fixed top-5 right-5 z-50">
         <span class="tt-thumb" aria-hidden="true"></span>
         <svg class="tt-icon tt-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         <svg class="tt-icon tt-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -464,11 +464,20 @@
       var chevron = document.getElementById('toggle-bots-chevron');
       if (!btn || !panel || !label || !chevron) return;
 
+      // Позиция страницы до раскрытия каталога: при сворачивании возвращаемся
+      // на неё, иначе из-за схлопнувшегося контента улетаешь в конец страницы
+      var scrollBeforeOpen = 0;
+
       btn.addEventListener('click', function () {
         var expanded = panel.classList.toggle('hidden') === false;
         btn.setAttribute('aria-expanded', String(expanded));
         label.textContent = expanded ? 'Скрыть' : 'Показать все боты';
         chevron.style.transform = expanded ? 'rotate(180deg)' : 'rotate(0deg)';
+        if (expanded) {
+          scrollBeforeOpen = window.scrollY;
+        } else {
+          window.scrollTo(0, scrollBeforeOpen);
+        }
       });
     })();
   </script>

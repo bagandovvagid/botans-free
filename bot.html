@@ -129,11 +129,13 @@
       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       <span class="hidden sm:inline">Каталог ботов</span>
     </a>
-    <div class="flex items-center gap-3 sm:gap-4">
+    <div class="flex items-center pr-24">
       <a href="index.html" class="font-display text-xl sm:text-2xl font-bold tracking-tight">Botans <span class="text-cyan-deep">free</span></a>
-      <!-- Переключатель темы: светлые/тёмные обои -->
+      <!-- Переключатель темы: светлые/тёмные обои. Кнопка закреплена в углу
+           экрана и не уезжает при прокрутке; pr-24 выше резервирует ей место,
+           чтобы логотип не оказался под ней -->
       <button id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Переключить тему"
-              class="theme-toggle relative">
+              class="theme-toggle fixed top-5 right-5 z-50">
         <span class="tt-thumb" aria-hidden="true"></span>
         <svg class="tt-icon tt-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         <svg class="tt-icon tt-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
