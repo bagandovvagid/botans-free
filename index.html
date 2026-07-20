@@ -120,6 +120,38 @@
     ::selection { background: rgba(0,217,255,.35); }
     #more-bots:not(.hidden) { animation: bots-reveal .35s ease; }
     @keyframes bots-reveal { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ===== Форма заявки и FAQ =====
+       Свои классы, а не утилиты, потому что тёмная тема здесь не автоматическая:
+       каждый цвет пришлось бы дублировать правилом html.dark отдельно */
+    .field {
+      width: 100%;
+      background: rgba(255,255,255,.9);
+      border: 1px solid rgba(15,23,42,.14);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font: inherit; font-size: 15px;
+      color: #0a0e1a;
+      transition: border-color .25s ease, box-shadow .25s ease;
+    }
+    .field::placeholder { color: #94a3b8; }
+    .field:focus { outline: none; border-color: #00a8c6; box-shadow: 0 0 0 3px rgba(0,217,255,.18); }
+    .field.invalid { border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,.14); }
+    html.dark .field { background: rgba(23,35,27,.92); border-color: rgba(255,255,255,.14); color: #e7eee8; }
+    html.dark .field::placeholder { color: #7d8c81; }
+    html.dark .field:focus { border-color: #4fd8ef; box-shadow: 0 0 0 3px rgba(79,216,239,.18); }
+    html.dark .field.invalid { border-color: #f87171; box-shadow: 0 0 0 3px rgba(248,113,113,.18); }
+    .field-err { color: #b91c1c; }
+    html.dark .field-err { color: #f87171; }
+
+    .faq-item + .faq-item { border-top: 1px solid rgba(15,23,42,.1); }
+    html.dark .faq-item + .faq-item { border-top-color: rgba(255,255,255,.1); }
+    .faq-q { -webkit-tap-highlight-color: transparent; }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+    .faq-chevron { transition: transform .3s ease; }
+    @media (prefers-reduced-motion: reduce) {
+      .faq-a, .faq-chevron { transition: none; }
+    }
   </style>
 </head>
 <body class="text-night font-sans antialiased">
@@ -433,6 +465,103 @@
     </div>
   </section>
 
+  <!-- ===== ФОРМА ЗАЯВКИ ===== -->
+  <section id="lead" class="max-w-3xl mx-auto px-5 pb-16 sm:pb-24">
+    <div class="bg-white/95 border border-white/70 rounded-3xl p-6 sm:p-9 shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
+      <h2 class="font-display font-bold text-2xl sm:text-3xl mb-2">Оставить заявку</h2>
+      <p id="lead-note" class="text-slate-600 text-sm mb-7">Опишите задачу — отвечу в течение суток.</p>
+
+      <form id="lead-form" novalidate class="space-y-5">
+        <div>
+          <label for="lead-name" class="block text-slate-700 text-sm font-medium mb-1.5">Как вас зовут <span class="field-err">*</span></label>
+          <input id="lead-name" name="name" type="text" autocomplete="name" class="field" placeholder="Например, Вагид">
+          <p class="field-err text-xs mt-1.5 hidden" data-err-for="lead-name">Укажите имя</p>
+        </div>
+
+        <div>
+          <label for="lead-niche" class="block text-slate-700 text-sm font-medium mb-1.5">Ниша бизнеса <span class="field-err">*</span></label>
+          <input id="lead-niche" name="niche" type="text" class="field" placeholder="Например, барбершоп или онлайн-школа">
+          <p class="field-err text-xs mt-1.5 hidden" data-err-for="lead-niche">Укажите нишу</p>
+        </div>
+
+        <div>
+          <label for="lead-bot" class="block text-slate-700 text-sm font-medium mb-1.5">Какой бот интересует</label>
+          <select id="lead-bot" name="bot_type" class="field">
+            <option value="">Пока не определился</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="lead-comment" class="block text-slate-700 text-sm font-medium mb-1.5">Комментарий <span class="text-slate-500 font-normal">— необязательно</span></label>
+          <textarea id="lead-comment" name="comment" rows="3" class="field" placeholder="Что должен уметь бот, сроки, бюджет"></textarea>
+        </div>
+
+        <button type="submit" id="lead-submit"
+                class="glow-btn w-full bg-cyan text-night font-semibold text-base px-6 py-4 rounded-xl">Отправить заявку</button>
+        <p id="lead-fallback-hint" class="text-slate-500 text-xs text-center hidden">Откроется чат с ботом — останется нажать «Отправить».</p>
+      </form>
+
+      <div id="lead-done" class="hidden text-center py-6">
+        <div class="w-14 h-14 rounded-2xl bg-cyan/15 flex items-center justify-center mx-auto mb-4">
+          <svg class="w-7 h-7" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <h3 class="font-display font-semibold text-xl mb-2">Заявка отправлена</h3>
+        <p class="text-slate-600 text-sm">Свяжусь с вами в течение дня.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ: ЛЕГАЛЬНОСТЬ АРХИВАТОРА ===== -->
+  <section id="faq" class="max-w-3xl mx-auto px-5 pb-16 sm:pb-24">
+    <h2 class="font-display font-bold text-2xl sm:text-4xl text-center mb-3">Насколько это законно</h2>
+    <p class="text-slate-600 text-center mb-10 sm:mb-12">Частые вопросы про бота-архиватор и доступ к переписке.</p>
+
+    <div class="bg-white/95 border border-white/70 rounded-3xl px-6 sm:px-9 shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
+      <div class="faq-item">
+        <button type="button" class="faq-q w-full flex items-start justify-between gap-4 text-left py-5" aria-expanded="false">
+          <span class="font-display font-semibold text-base sm:text-lg">Это законно?</span>
+          <svg class="faq-chevron w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          <p class="text-slate-600 text-sm sm:text-base leading-relaxed pb-5">Бот работает через официальный Telegram Business API: бот получает доступ к переписке только после того, как владелец аккаунта сам подключает бота в настройках Telegram. Внешние базы данных не используются.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-q w-full flex items-start justify-between gap-4 text-left py-5" aria-expanded="false">
+          <span class="font-display font-semibold text-base sm:text-lg">Бот читает чужие переписки без разрешения?</span>
+          <svg class="faq-chevron w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          <p class="text-slate-600 text-sm sm:text-base leading-relaxed pb-5">Бот копирует данные сообщений и хранит их у себя.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-q w-full flex items-start justify-between gap-4 text-left py-5" aria-expanded="false">
+          <span class="font-display font-semibold text-base sm:text-lg">Telegram не заблокирует аккаунт?</span>
+          <svg class="faq-chevron w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          <p class="text-slate-600 text-sm sm:text-base leading-relaxed pb-5">Это официальный механизм, а не обход ограничений.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button type="button" class="faq-q w-full flex items-start justify-between gap-4 text-left py-5" aria-expanded="false">
+          <span class="font-display font-semibold text-base sm:text-lg">Где хранятся архивные данные?</span>
+          <svg class="faq-chevron w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="faq-a">
+          <p class="text-slate-600 text-sm sm:text-base leading-relaxed pb-5">На сервере, который вы арендуете под своего бота. Доступ — только у вас.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="text-slate-500 text-xs leading-relaxed text-center mt-5 max-w-xl mx-auto">Это не юридическая консультация — при работе с чувствительными данными свериться с юристом под вашу юрисдикцию.</p>
+  </section>
+
   <!-- ===== CTA + КОНТАКТ ===== -->
   <section id="contact" class="relative overflow-hidden">
     <div class="relative max-w-2xl mx-auto px-5 py-16 sm:py-24">
@@ -491,6 +620,123 @@
           window.scrollTo(0, scrollBeforeOpen);
         }
       });
+    })();
+
+    // Бот, который принимает заявки из браузерного режима
+    var LEAD_BOT = 'botansfree_bot';
+
+    // Варианты для выпадающего списка в форме — те же, что в каталоге выше
+    var LEAD_BOTS = {
+      archiver:  { name: 'Бот-архиватор', desc: 'Восстановление удалённых сообщений, архив медиа, история диалогов', price: 'от 4 500 ₽' },
+      support:   { name: 'Бот поддержки', desc: 'FAQ, приём заявок, маршрутизация обращений на менеджеров', price: 'от 2 500 ₽' },
+      shop:      { name: 'Бот-магазин', desc: 'Каталог, корзина, приём оплаты — Telegram Payments или ЮKassa', price: 'от 7 500 ₽' },
+      booking:   { name: 'Бот записи', desc: 'Онлайн-запись на услуги: салоны, автосервисы, клиники', price: 'от 4 500 ₽' },
+      broadcast: { name: 'Бот рассылок', desc: 'Уведомления, автоворонки, сегментация аудитории', price: 'от 3 500 ₽' },
+      ai:        { name: 'ИИ-бот', desc: 'Ответы на базе ChatGPT, консультации клиентов 24/7', price: 'от 5 500 ₽' },
+    };
+
+
+    // ===== Форма заявки: Mini App или обычный браузер =====
+    (function () {
+      var form = document.getElementById('lead-form');
+      var done = document.getElementById('lead-done');
+      var note = document.getElementById('lead-note');
+      var hint = document.getElementById('lead-fallback-hint');
+      var select = document.getElementById('lead-bot');
+      if (!form || !done || !select) return;
+
+      for (var key in LEAD_BOTS) {
+        var opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = LEAD_BOTS[key].name;
+        select.appendChild(opt);
+      }
+
+      var tg = window.Telegram && window.Telegram.WebApp;
+      // Внутри Telegram отправляем данные боту напрямую; ready()/expand() уже вызывает assets/tg.js
+      var inTelegram = !!(tg && tg.initData && tg.initData.length > 0);
+
+      if (inTelegram) {
+        note.textContent = 'Заполните — заявка уйдёт прямо в чат с ботом.';
+      } else {
+        hint.classList.remove('hidden');
+      }
+
+      function fieldError(input, show) {
+        input.classList.toggle('invalid', show);
+        var msg = form.querySelector('[data-err-for="' + input.id + '"]');
+        if (msg) msg.classList.toggle('hidden', !show);
+        return !show;
+      }
+
+      // Пока поле подсвечено красным — гасим подсветку, как только начали печатать
+      ['lead-name', 'lead-niche'].forEach(function (id) {
+        var input = document.getElementById(id);
+        input.addEventListener('input', function () {
+          if (input.classList.contains('invalid') && input.value.trim()) fieldError(input, false);
+        });
+      });
+
+      form.addEventListener('submit', function (ev) {
+        ev.preventDefault();
+
+        var name = document.getElementById('lead-name');
+        var niche = document.getElementById('lead-niche');
+        var comment = document.getElementById('lead-comment');
+
+        var okName = fieldError(name, !name.value.trim());
+        var okNiche = fieldError(niche, !niche.value.trim());
+        if (!okName || !okNiche) {
+          (okName ? niche : name).focus();
+          return;
+        }
+
+        var botTitle = select.value ? LEAD_BOTS[select.value].name : 'не определился';
+        var payload = {
+          name: name.value.trim(),
+          niche: niche.value.trim(),
+          bot_type: select.value,
+          comment: comment.value.trim(),
+        };
+
+        if (inTelegram) {
+          try { tg.sendData(JSON.stringify(payload)); } catch (e) {}
+          form.classList.add('hidden');
+          done.classList.remove('hidden');
+          setTimeout(function () { try { tg.close(); } catch (e) {} }, 1500);
+          return;
+        }
+
+        var text = 'ЗАЯВКА:\n' +
+          'Имя: ' + payload.name + '\n' +
+          'Ниша: ' + payload.niche + '\n' +
+          'Бот: ' + botTitle +
+          (payload.comment ? '\nКомментарий: ' + payload.comment : '');
+
+        window.open('https://t.me/' + LEAD_BOT + '?text=' + encodeURIComponent(text), '_blank');
+        form.classList.add('hidden');
+        done.classList.remove('hidden');
+      });
+    })();
+
+    // ===== FAQ-аккордеон =====
+    (function () {
+      var items = document.querySelectorAll('#faq .faq-item');
+      for (var i = 0; i < items.length; i++) {
+        (function (item) {
+          var btn = item.querySelector('.faq-q');
+          var panel = item.querySelector('.faq-a');
+          var chevron = item.querySelector('.faq-chevron');
+
+          btn.addEventListener('click', function () {
+            var open = btn.getAttribute('aria-expanded') === 'true';
+            btn.setAttribute('aria-expanded', String(!open));
+            // Высоту берём из содержимого: max-height анимируется, auto — нет
+            panel.style.maxHeight = open ? '' : panel.scrollHeight + 'px';
+            chevron.style.transform = open ? '' : 'rotate(180deg)';
+          });
+        })(items[i]);
+      }
     })();
   </script>
 </body>
