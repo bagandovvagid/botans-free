@@ -1,158 +1,112 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth">
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Бот — Botans free</title>
-  <meta name="description" content="Подробнее о боте: что умеет, кому подходит и авторский демо-бот, чтобы проверить его способности.">
-  <meta name="theme-color" content="#6eb075">
+  <title>Бот — Botans Free</title>
+  <meta name="description" content="Подробное описание Telegram-бота: возможности, кому подходит, цена и примеры работы.">
+  <meta name="theme-color" content="#0a0a0b">
+  <script src="assets/theme-init.js"></script>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="assets/theme.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            night: '#0a0e1a',
-            panel: '#0f1526',
-            cyan: { DEFAULT: '#00d9ff', dim: '#00a8c6', deep: '#0b7285' },
-          },
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
-            display: ['Space Grotesk', 'Inter', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="assets/luxury.css">
   <style>
-    body { background-color: #6eb075; transition: background-color .5s ease; }
-    html.dark body { background-color: #101b13; }
-    /* Те же обои, что и на главной, — закреплены за экраном.
-       Два слоя: светлые и тёмные — переключение темы меняет только их */
-    .wallpaper {
-      position: fixed;
-      inset: 0;
-      z-index: -10;
-      background: center / cover no-repeat;
+    .bot-hero { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+    .bot-hero .card-icon { width: 54px; height: 54px; border-radius: 14px; margin: 0; }
+    .bot-hero .card-icon svg { width: 26px; height: 26px; }
+    .bot-hero h1 { font-size: clamp(24px, 4vw, 36px); }
+
+    /* Иконки в данных ботов рисовались под светлую тему: у части залиты
+       тёмным цветом старой палитры. На тёмном фоне они пропадают —
+       перекрашиваем в цвет иконки. */
+    .card-icon [fill="#0b7285"] { fill: currentColor; }
+
+    /* Ссылка внутри поля news осталась со старыми классами Tailwind */
+    .text-cyan-deep { color: var(--cyan); }
+    .text-cyan-deep:hover { text-decoration: underline; }
+
+    .price-chip {
+      display: inline-flex; align-items: baseline; gap: 9px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: rgba(201, 169, 97, .1);
+      border: 1px solid rgba(201, 169, 97, .32);
     }
-    html:not(.dark) .wallpaper-light,
-    html.wp-armed .wallpaper-light { background-image: url('assets/tg-wallpaper.jpg'); }
-    .wallpaper-dark { z-index: -9; opacity: 0; transition: opacity .6s ease; }
-    html.dark .wallpaper-dark,
-    html.wp-armed .wallpaper-dark { background-image: url('assets/wallpaper_for_site_black.png'); }
-    html.dark .wallpaper-dark { opacity: 1; }
-    /* Переключатель темы: ползунок с солнцем и луной */
-    .theme-toggle {
-      width: 74px; height: 38px; flex: none;
-      border-radius: 9999px;
-      background: rgba(255,255,255,.78);
-      border: 1px solid rgba(255,255,255,.75);
-      box-shadow: 0 6px 20px rgba(23,74,44,.16);
-      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      transition: background-color .45s ease, border-color .45s ease, box-shadow .3s ease, transform .3s ease;
-    }
-    .theme-toggle:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(23,74,44,.24); }
-    .theme-toggle:focus-visible { outline: 2px solid #00a8c6; outline-offset: 3px; }
-    html.dark .theme-toggle { background: rgba(12,20,14,.72); border-color: rgba(127,230,163,.25); box-shadow: 0 6px 20px rgba(0,0,0,.5); }
-    .theme-toggle .tt-thumb {
-      position: absolute; top: 3px; left: 3px;
-      width: 30px; height: 30px; border-radius: 9999px;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(20,40,30,.35);
-      transition: transform .45s cubic-bezier(.3,1.35,.45,1), background-color .45s ease;
-    }
-    html.dark .theme-toggle .tt-thumb { transform: translateX(36px); background: #16281c; box-shadow: 0 2px 10px rgba(0,0,0,.55); }
-    .theme-toggle .tt-icon { position: absolute; top: 50%; margin-top: -9px; width: 18px; height: 18px; pointer-events: none; transition: color .45s ease, opacity .45s ease; }
-    .theme-toggle .tt-sun { left: 9px; color: #d97706; }
-    .theme-toggle .tt-moon { right: 9px; color: #64748b; opacity: .75; }
-    html.dark .theme-toggle .tt-sun { color: #9fb8a8; opacity: .55; }
-    html.dark .theme-toggle .tt-moon { color: #7fe6a3; opacity: 1; }
-    /* ===== Тёмная тема: текст и поверхности =====
-       По правилам тёмных UI: поверхности — тёмные с зелёным оттенком обоев
-       (не чисто-чёрные), текст — не чисто-белый (~87% белого, контраст ≥ 4.5:1),
-       акценты — светлее и приглушённее, чтобы не «вибрировали» на тёмном фоне */
-    html.dark body { color: #e7eee8; }
-    html.dark .text-slate-800 { color: #dbe5dc; }
-    html.dark .text-slate-700 { color: #c2cfc5; }
-    html.dark .text-slate-600 { color: #a9b8ad; }
-    html.dark .text-slate-500 { color: #8e9d92; }
-    html.dark .text-cyan-deep { color: #4fd8ef; }
-    html.dark .text-cyan-dim\/70 { color: rgba(79,216,239,.55); }
-    html.dark .bg-white.text-night { color: #4fd8ef; }
-    html.dark svg[stroke="#0b7285"] { stroke: #4fd8ef; }
-    html.dark [fill="#0b7285"] { fill: #4fd8ef; }
-    html.dark .bg-white,
-    html.dark .bg-white\/95 { background-color: rgba(23,35,27,.92); }
-    html.dark .bg-white\/80 { background-color: rgba(23,35,27,.85); }
-    html.dark .bg-white\/85,
-    html.dark .bg-white\/75 { background-color: rgba(30,46,36,.85); }
-    html.dark .hover\:bg-white:hover,
-    html.dark .hover\:bg-white\/90:hover { background-color: rgba(40,60,47,.95); }
-    html.dark .bg-slate-50 { background-color: rgba(255,255,255,.05); }
-    html.dark .bg-cyan\/15 { background-color: rgba(79,216,239,.13); }
-    html.dark .bg-cyan\/10 { background-color: rgba(79,216,239,.09); }
-    html.dark .bg-cyan { background-color: #35cfe8; }
-    html.dark .border-white\/70 { border-color: rgba(255,255,255,.09); }
-    html.dark .border-slate-200 { border-color: rgba(255,255,255,.12); }
-    html.dark .border-cyan-dim\/70 { border-color: rgba(79,216,239,.4); }
-    html.dark .border-cyan-dim\/60 { border-color: rgba(79,216,239,.35); }
-    html.dark .border-cyan-dim\/50 { border-color: rgba(79,216,239,.3); }
-    html.dark .border-cyan-dim\/40 { border-color: rgba(79,216,239,.22); }
-    html.dark .card:hover { border-color: rgba(79,216,239,.5); box-shadow: 0 14px 38px rgba(0,0,0,.5); }
-    html.dark .glow-btn:hover { box-shadow: 0 0 24px rgba(79,216,239,.4), 0 0 60px rgba(79,216,239,.18); }
-    /* Светлые скриншоты в тёмной теме слегка приглушаем, чтобы не слепили */
-    html.dark figure img { filter: brightness(.85); }
-    @media (prefers-reduced-motion: reduce) {
-      body, .wallpaper-dark, .theme-toggle, .theme-toggle .tt-thumb { transition: none; }
-    }
-    .glow-btn { transition: box-shadow .3s ease, transform .3s ease, background-color .3s ease; }
-    .glow-btn:hover { box-shadow: 0 0 24px rgba(0,217,255,.55), 0 0 60px rgba(0,217,255,.25); transform: translateY(-2px); }
-    ::selection { background: rgba(0,217,255,.35); }
+    .price-chip .lbl { color: var(--muted); font-size: 13px; }
+    .price-chip .sum { color: var(--gold); font-weight: 600; }
+
+    .sub-h { font-size: 18px; margin: 28px 0 14px; }
+
+    .shots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; align-items: start; }
+    .shot { background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .shot img { width: 100%; height: auto; }
+    .shot figcaption { color: var(--muted); font-size: 13px; padding: 12px 15px; }
+
+    .demo-card { border-color: rgba(42, 208, 214, .32); text-align: center; padding: 32px 26px; }
+    .demo-card.is-soon { border-style: dashed; }
+
+    @media (max-width: 700px) { .shots { grid-template-columns: 1fr; } }
   </style>
 </head>
-<body class="text-night font-sans antialiased">
+<body>
 
-  <div class="wallpaper wallpaper-light" aria-hidden="true"></div>
-  <div class="wallpaper wallpaper-dark" aria-hidden="true"></div>
-
-  <!-- ===== ШАПКА ===== -->
-  <header class="max-w-6xl mx-auto px-5 pt-8 flex items-center justify-between gap-4">
-    <a href="index.html#services"
-       class="inline-flex items-center gap-2 bg-white/85 hover:bg-white border border-white/70 rounded-full px-4 py-2 text-sm font-medium text-slate-800 transition shadow-[0_6px_20px_rgba(23,74,44,0.12)]">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-      <span class="hidden sm:inline">Каталог ботов</span>
-    </a>
-    <div class="flex items-center pr-24">
-      <a href="index.html" class="font-display text-xl sm:text-2xl font-bold tracking-tight">Botans <span class="text-cyan-deep">free</span></a>
-      <!-- Переключатель темы: светлые/тёмные обои. Кнопка закреплена в углу
-           экрана и не уезжает при прокрутке; pr-24 выше резервирует ей место,
-           чтобы логотип не оказался под ней -->
-      <button id="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="Переключить тему"
-              class="theme-toggle fixed top-5 right-5 z-50">
-        <span class="tt-thumb" aria-hidden="true"></span>
-        <svg class="tt-icon tt-sun" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="tt-icon tt-moon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">BF</span>
+        <span class="brand-name">Botans<span>Free</span></span>
+      </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html">Главная</a>
+        <a href="catalog.html" class="is-active">Каталог ботов</a>
+        <a href="index.html#features">Возможности</a>
+        <a href="faq.html">FAQ</a>
+        <a href="vpn.html">Наш VPN</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Переключить тему"></button>
+        <button class="btn btn-ghost btn-sm" data-soon="Личных кабинетов пока нет — заказ оформляется в Telegram">Войти</button>
+        <button class="btn btn-gold btn-sm" data-soon="Регистрация появится позже. Пока напишите нам в Telegram">Регистрация</button>
+        <button class="nav-burger" id="nav-burger" aria-label="Меню" aria-expanded="false">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Контент подставляется скриптом в зависимости от ?bot= в адресе -->
-  <main id="bot-page" class="max-w-3xl mx-auto px-5 py-10 sm:py-14"></main>
+  <div class="wrap">
+    <div class="crumbs">
+      <a href="index.html">Главная</a><span class="sep">/</span>
+      <a href="catalog.html">Каталог ботов</a><span class="sep">/</span>
+      <span id="crumb-now">Бот</span>
+    </div>
+  </div>
 
-  <footer>
-    <div class="max-w-6xl mx-auto px-5 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-700 text-sm">
-      <span class="font-display font-semibold text-slate-800">Botans <span class="text-cyan-deep">free</span></span>
+  <main class="wrap" id="page" style="padding: 26px 20px 60px"></main>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">BF</span>
+        <span class="brand-name">Botans<span>Free</span></span>
+      </a>
+      <nav class="foot-links">
+        <a href="catalog.html">Каталог</a>
+        <a href="vpn.html">VPN</a>
+        <a href="faq.html">FAQ</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
       <span>© 2026 · Разработка Telegram-ботов</span>
     </div>
   </footer>
 
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/tg.js"></script>
+  <script src="assets/luxury.js"></script>
   <script>
     // Контакты для заказа
     const CONTACT_URL = 'https://t.me/botans_free';
@@ -366,115 +320,101 @@
       },
     };
 
+    const CHECK = '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+    const ARROW_TG = '<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M11.94 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.64 6.8-1.63 7.68c-.12.55-.45.68-.9.42l-2.5-1.84-1.2 1.16c-.14.13-.25.24-.5.24l.17-2.52 4.6-4.15c.2-.18-.04-.28-.31-.1l-5.68 3.57-2.45-.76c-.53-.17-.54-.53.11-.79l9.57-3.69c.44-.16.83.11.72.78z"/></svg>';
+
+    const page = document.getElementById('page');
     const slug = new URLSearchParams(location.search).get('bot');
-    // Только собственные ключи каталога: ?bot=constructor и подобные
-    // значения из прототипа должны вести на «бот не найден», а не ронять скрипт
+    // Только собственные ключи каталога: ?bot=constructor и подобные значения
+    // из прототипа объекта должны вести на «бот не найден», а не ронять скрипт
     const bot = slug && Object.prototype.hasOwnProperty.call(BOTS, slug) ? BOTS[slug] : null;
-    const page = document.getElementById('bot-page');
 
     if (!bot) {
-      document.title = 'Бот не найден — Botans free';
+      document.getElementById('crumb-now').textContent = 'Бот не найден';
       page.innerHTML = `
-        <section class="bg-white/95 border border-white/70 rounded-3xl p-8 sm:p-12 text-center shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
-          <h1 class="font-display font-bold text-2xl sm:text-4xl mb-4">Такой бот не найден</h1>
-          <p class="text-slate-600 mb-8">Возможно, ссылка устарела. Загляните в каталог — там все актуальные сценарии.</p>
-          <a href="index.html#services" class="glow-btn inline-block bg-cyan text-night font-semibold px-8 py-4 rounded-xl">Открыть каталог</a>
-        </section>`;
+        <div class="card" style="text-align:center;padding:48px 26px">
+          <h1 style="font-size:26px;margin-bottom:10px">Бот не найден</h1>
+          <p style="color:var(--muted);margin-bottom:24px">Похоже, ссылка устарела или в адресе опечатка.</p>
+          <a class="btn btn-cyan" href="catalog.html">Вернуться в каталог</a>
+        </div>`;
     } else {
-      document.title = bot.title + ' — Botans free';
+      document.title = bot.title + ' — Botans Free';
+      document.getElementById('crumb-now').textContent = bot.title;
 
-      const features = bot.features.map(f => `
-        <li class="flex items-start gap-3">
-          <svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="#0b7285" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-          <span class="text-slate-700 text-sm sm:text-base leading-relaxed">${f}</span>
-        </li>`).join('');
+      const features = bot.features.map(f =>
+        `<li>${CHECK}<span>${f}</span></li>`).join('');
 
       // Если авторский бот готов (есть bot.demo) — кнопка, иначе «в разработке»
       const demoSection = bot.demo ? `
-        <section class="mt-6 bg-white/95 border-2 border-cyan-dim/60 rounded-3xl p-7 sm:p-10 text-center shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
-          <h2 class="font-display font-bold text-xl sm:text-3xl mb-3">Проверьте его способности</h2>
-          <p class="text-slate-600 mb-7 max-w-xl mx-auto">${bot.demoText}</p>
-          <a href="${bot.demo}" target="_blank" rel="noopener"
-             class="glow-btn inline-flex items-center gap-3 bg-cyan text-night font-semibold text-base sm:text-lg px-8 py-4 rounded-xl">
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M11.94 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm4.64 6.8-1.63 7.68c-.12.55-.45.68-.9.42l-2.5-1.84-1.2 1.16c-.14.13-.25.24-.5.24l.17-2.52 4.6-4.15c.2-.18-.04-.28-.31-.1l-5.68 3.57-2.45-.76c-.53-.17-.54-.53.11-.79l9.57-3.69c.44-.16.83.11.72.78z"/></svg>
-            Открыть демо-бота
-          </a>
-          <p class="text-slate-500 text-xs sm:text-sm mt-5">Авторский демо-бот · бесплатно, без регистрации</p>
-          ${bot.news ? `<p class="text-slate-700 text-sm sm:text-base mt-6 pt-5 border-t border-slate-200">${bot.news}</p>` : ''}
+        <section class="card demo-card" style="margin-top:18px">
+          <h2 style="font-size:22px;margin-bottom:10px">Проверьте его способности</h2>
+          <p style="color:var(--muted);max-width:560px;margin:0 auto 22px">${bot.demoText}</p>
+          <a class="btn btn-cyan btn-lg" href="${bot.demo}" target="_blank" rel="noopener">${ARROW_TG} Открыть демо-бота</a>
+          <p style="color:var(--muted);font-size:12.5px;margin-top:14px">Авторский демо-бот · бесплатно, без регистрации</p>
+          ${bot.news ? `<p style="color:var(--text-dim);font-size:14px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line-soft)">${bot.news}</p>` : ''}
         </section>` : `
-        <section class="mt-6 bg-white/80 border-2 border-dashed border-cyan-dim/50 rounded-3xl p-7 sm:p-10 text-center shadow-[0_18px_60px_rgba(23,74,44,0.18)]">
-          <h2 class="font-display font-bold text-xl sm:text-3xl mb-3">Проверьте его способности</h2>
-          <p class="text-slate-600 max-w-xl mx-auto">Авторский бот в разработке...</p>
+        <section class="card demo-card is-soon" style="margin-top:18px">
+          <h2 style="font-size:22px;margin-bottom:10px">Проверьте его способности</h2>
+          <p style="color:var(--muted)">Авторский демо-бот в разработке.</p>
         </section>`;
 
       // Скриншоты реальной работы бота, если есть
       const examplesSection = bot.examples ? `
-        <section class="mt-6 bg-white/95 border border-white/70 rounded-3xl p-7 sm:p-10 shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
-          <h2 class="font-display font-bold text-xl sm:text-3xl mb-3 text-center">Так может работать ваш бот</h2>
-          <p class="text-slate-600 text-center max-w-xl mx-auto mb-7">${bot.examples.intro}</p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 items-start">
+        <section class="card" style="margin-top:18px;padding:30px 26px">
+          <h2 style="font-size:22px;text-align:center;margin-bottom:10px">Так может работать ваш бот</h2>
+          <p style="color:var(--muted);text-align:center;max-width:560px;margin:0 auto 24px">${bot.examples.intro}</p>
+          <div class="shots">
             ${bot.examples.items.map(ex => `
-            <figure class="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden">
-              <img src="${ex.src}" alt="${ex.alt}" loading="lazy" class="w-full h-auto">
-              <figcaption class="text-slate-600 text-sm leading-relaxed px-4 py-3">${ex.caption}</figcaption>
+            <figure class="shot">
+              <img src="${ex.src}" alt="${ex.alt}" loading="lazy">
+              <figcaption>${ex.caption}</figcaption>
             </figure>`).join('')}
           </div>
         </section>` : '';
 
       page.innerHTML = `
-        <!-- Карточка бота -->
-        <section class="bg-white/95 border border-white/70 rounded-3xl p-7 sm:p-10 shadow-[0_18px_60px_rgba(23,74,44,0.25)]">
-          <div class="flex items-center gap-4 mb-5">
-            <div class="w-14 h-14 rounded-2xl bg-cyan/15 flex items-center justify-center shrink-0">
-              <svg class="w-7 h-7" fill="none" stroke="#0b7285" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">${bot.icon}</svg>
-            </div>
-            <h1 class="font-display font-bold text-2xl sm:text-4xl tracking-tight">${bot.title}${bot.hit ? ' <span class="align-middle ml-1 inline-block bg-cyan text-night text-xs font-bold px-3 py-1 rounded-full">Хит</span>' : ''}</h1>
+        <section class="card" style="padding:30px 26px">
+          <div class="bot-hero">
+            <span class="card-icon">
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">${bot.icon}</svg>
+            </span>
+            <h1>${bot.title}${bot.hit ? ' <span class="badge badge-cyan" style="vertical-align:middle">Хит</span>' : ''}</h1>
           </div>
-          <p class="text-slate-600 text-base sm:text-lg leading-relaxed mb-4">${bot.about}</p>
-          ${bot.price ? `<span class="inline-flex items-baseline gap-x-2 bg-white/75 border border-white/70 rounded-full px-5 py-2 shadow-[0_6px_20px_rgba(23,74,44,0.15)] mb-2">
-            <span class="text-slate-600 text-sm">Цена</span>
-            <span class="text-cyan-deep font-semibold">${bot.price}</span>
-          </span>` : ''}
 
-          <h2 class="font-display font-semibold text-xl sm:text-2xl mt-7 mb-4">Что умеет</h2>
-          <ul class="space-y-3">${features}</ul>
+          <p style="color:var(--text-dim);font-size:16px;margin-bottom:18px">${bot.about}</p>
+          ${bot.price ? `<span class="price-chip"><span class="lbl">Цена</span><span class="sum">${bot.price}</span></span>` : ''}
+
+          <h2 class="sub-h">Что умеет</h2>
+          <ul class="checks">${features}</ul>
+
           ${bot.forWhom ? `
-          <h2 class="font-display font-semibold text-xl sm:text-2xl mt-9 mb-4">Кому подходит</h2>
-          <div class="flex flex-wrap gap-2">${bot.forWhom.map(w => `<span class="bg-cyan/10 border border-cyan-dim/40 text-slate-700 text-sm rounded-full px-4 py-1.5">${w}</span>`).join('')}</div>` : ''}
+          <h2 class="sub-h">Кому подходит</h2>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">${bot.forWhom.map(w => `<span class="tag">${w}</span>`).join('')}</div>` : ''}
         </section>
 
-        <!-- Примеры работы -->
         ${examplesSection}
-
-        <!-- Авторский демо-бот -->
         ${demoSection}
 
-        <!-- Заказ -->
-        <section class="mt-6 bg-white rounded-3xl rounded-bl-lg px-6 py-9 sm:px-10 sm:py-11 text-center shadow-[0_18px_60px_rgba(23,74,44,0.30)]">
-          <h2 class="font-display font-bold text-xl sm:text-3xl mb-3">Нужен такой бот под вашу задачу?</h2>
-          <p class="text-slate-600 mb-7">Два способа на связь — выберите, что подходит задаче:</p>
+        <section class="card" style="margin-top:18px;padding:30px 26px;text-align:center">
+          <h2 style="font-size:22px;margin-bottom:8px">Нужен такой бот под вашу задачу?</h2>
+          <p style="color:var(--muted);margin-bottom:24px">Два способа на связь — выберите, что подходит задаче</p>
 
-          <div class="grid sm:grid-cols-2 gap-4 text-left">
-            <div class="border border-slate-200 rounded-2xl p-5 flex flex-col">
-              <h3 class="font-display font-semibold text-base mb-1.5">🤖 Бот @botansfree_bot</h3>
-              <p class="text-slate-600 text-sm mb-5 flex-1">Ответы на частые вопросы и ценник на ботов.</p>
-              <a href="${BOT_URL}" target="_blank" rel="noopener"
-                 class="glow-btn inline-flex items-center justify-center gap-2 bg-cyan text-night font-semibold text-sm px-5 py-3 rounded-xl">Написать боту</a>
+          <div class="grid grid-2" style="text-align:left">
+            <div class="card" style="background:var(--panel-2);display:flex;flex-direction:column">
+              <h3>Бот @botansfree_bot</h3>
+              <p style="flex:1;margin-bottom:16px">Ответы на частые вопросы и ценник на ботов.</p>
+              <a class="btn btn-cyan" href="${BOT_URL}" target="_blank" rel="noopener">Написать боту</a>
             </div>
-            <div class="border border-slate-200 rounded-2xl p-5 flex flex-col">
-              <h3 class="font-display font-semibold text-base mb-1.5">🧑‍💻 Эксперт @botans_free</h3>
-              <p class="text-slate-600 text-sm mb-5 flex-1">Для персональных и серьёзных вопросов.</p>
-              <a href="${CONTACT_URL}" target="_blank" rel="noopener"
-                 class="glow-btn inline-flex items-center justify-center gap-2 bg-white border border-cyan-dim/60 text-night font-semibold text-sm px-5 py-3 rounded-xl">Написать эксперту</a>
+            <div class="card" style="background:var(--panel-2);display:flex;flex-direction:column">
+              <h3>Эксперт @botans_free</h3>
+              <p style="flex:1;margin-bottom:16px">Для персональных и серьёзных вопросов.</p>
+              <a class="btn btn-ghost" href="${CONTACT_URL}" target="_blank" rel="noopener">Написать эксперту</a>
             </div>
           </div>
-        </section>
 
-        <p class="text-center text-slate-800 text-sm mt-10">Любые ваши правки учтутся</p>
-      `;
+          <p style="color:var(--muted);font-size:13px;margin-top:22px">Любые ваши правки учтутся</p>
+        </section>`;
     }
   </script>
-
-  <script src="assets/tg.js"></script>
 </body>
 </html>

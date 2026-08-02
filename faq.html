@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Частые вопросы — Botans Free</title>
+  <meta name="description" content="Ответы на популярные вопросы о разработке Telegram-ботов: сроки, цены, оплата, интеграции, поддержка и безопасность данных.">
+  <meta name="theme-color" content="#0a0a0b">
+  <script src="assets/theme-init.js"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/luxury.css">
+</head>
+<body>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">BF</span>
+        <span class="brand-name">Botans<span>Free</span></span>
+      </a>
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html">Главная</a>
+        <a href="catalog.html">Каталог ботов</a>
+        <a href="index.html#features">Возможности</a>
+        <a href="faq.html" class="is-active">FAQ</a>
+        <a href="vpn.html">Наш VPN</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Переключить тему"></button>
+        <button class="btn btn-ghost btn-sm" data-soon="Личных кабинетов пока нет — заказ оформляется в Telegram">Войти</button>
+        <button class="btn btn-gold btn-sm" data-soon="Регистрация появится позже. Пока напишите нам в Telegram">Регистрация</button>
+        <button class="nav-burger" id="nav-burger" aria-label="Меню" aria-expanded="false">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html">Главная</a><span class="sep">/</span><span>FAQ</span></div>
+    <div class="page-head">
+      <h1>Часто задаваемые вопросы</h1>
+      <p>Ответы на популярные вопросы о наших ботах</p>
+    </div>
+  </div>
+
+  <div class="wrap" style="padding-bottom:60px">
+    <div class="layout-side">
+
+      <aside class="side">
+        <h3>Разделы</h3>
+        <button class="side-item is-active" data-cat="all">Все вопросы <span class="count">14</span></button>
+        <button class="side-item" data-cat="general">Общие вопросы <span class="count">3</span></button>
+        <button class="side-item" data-cat="build">Создание бота <span class="count">3</span></button>
+        <button class="side-item" data-cat="price">Оплата и цены <span class="count">3</span></button>
+        <button class="side-item" data-cat="help">Техподдержка <span class="count">2</span></button>
+        <button class="side-item" data-cat="integr">Интеграции <span class="count">1</span></button>
+        <button class="side-item" data-cat="sec">Безопасность <span class="count">2</span></button>
+      </aside>
+
+      <div id="faq-list">
+
+        <div class="acc-item" data-cat="general">
+          <button class="acc-q" aria-expanded="false">Что такое Telegram-бот?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Программа внутри Telegram, которая общается с людьми вместо вас: отвечает на вопросы, принимает заказы, записывает на приём, ведёт рассылки. Клиенту не нужно ничего устанавливать — он просто пишет в чат.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="general">
+          <button class="acc-q" aria-expanded="false">Чем бот под ключ лучше конструктора?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Конструктор ограничен готовыми блоками: нестандартную логику, сложные интеграции и собственную базу в него не заложить. Бот под ключ пишется под вашу задачу, а код остаётся у вас — его можно дорабатывать, не спрашивая разрешения у платформы.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="general">
+          <button class="acc-q" aria-expanded="false">Мне нужен бот, но я не знаю какой. Поможете?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Да, это обычная ситуация. Опишите задачу простыми словами — что отнимает время или теряется. Подберу подходящий сценарий из каталога либо предложу собрать свой. Консультация бесплатная.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="build">
+          <button class="acc-q" aria-expanded="false">Сколько времени занимает создание бота?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Простой бот — от двух дней. Средний по сложности — около недели. Проекты с интеграциями и своей базой обсуждаем отдельно: срок называю до старта работ, вместе со сметой.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="build">
+          <button class="acc-q" aria-expanded="false">Можно ли внести изменения в готовый бот?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Да, в любой момент. Код остаётся у вас, поэтому дорабатывать бота можно и со мной, и силами другого разработчика.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="build">
+          <button class="acc-q" aria-expanded="false">Что нужно от меня для старта?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Описание задачи и материалы, с которыми бот будет работать: прайс, список услуг, частые вопросы. Всё остальное — регистрацию бота, сервер, настройку — беру на себя.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="price">
+          <button class="acc-q" aria-expanded="false">Сколько стоит бот?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Мелкие задачи — от 500 ₽, готовые сценарии из каталога — от 2 500 ₽. Цена зависит от сложности логики и количества интеграций; точная сумма фиксируется до начала работ.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="price">
+          <button class="acc-q" aria-expanded="false">Какие способы оплаты вы принимаете?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Пока переводом — реквизиты присылаю в Telegram. Оплата прямо на сайте появится позже.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="price">
+          <button class="acc-q" aria-expanded="false">Есть ли ежемесячная плата?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>За самого бота — нет, разработка оплачивается один раз. Отдельно оплачивается только сервер, если бот должен работать круглосуточно и хранить данные.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="help">
+          <button class="acc-q" aria-expanded="false">Предоставляете ли вы техподдержку?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Да. После запуска остаюсь на связи: помогаю с настройкой, отвечаю на вопросы и дорабатываю бота по мере роста задач.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="help">
+          <button class="acc-q" aria-expanded="false">Что делать, если бот перестал работать?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Напишите в Telegram — разберусь. Чаще всего дело в сервере или изменениях на стороне внешнего сервиса, и чинится это быстро.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="integr">
+          <button class="acc-q" aria-expanded="false">Можно ли интегрировать бота с другими сервисами?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Да: CRM, платёжные системы, Google-таблицы, базы данных, сторонние API. Если у сервиса есть открытый интерфейс — бота с ним свяжем.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="sec">
+          <button class="acc-q" aria-expanded="false">Как обеспечивается безопасность данных?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Данные хранятся на сервере, который принадлежит вам, — доступ только у вас. Ключи и токены не зашиваются в код, а лежат в защищённых настройках сервера.</p></div>
+        </div>
+
+        <div class="acc-item" data-cat="sec">
+          <button class="acc-q" aria-expanded="false">Бот-архиватор — это законно?<span class="acc-sign">+</span></button>
+          <div class="acc-a"><p>Бот работает через официальный Telegram Business API и получает доступ к переписке только после того, как владелец аккаунта сам подключил его в настройках Telegram. Это штатный механизм, а не обход ограничений. При работе с чувствительными данными стоит свериться с юристом под вашу юрисдикцию.</p></div>
+        </div>
+
+        <p class="empty" id="empty" hidden style="color:var(--muted);text-align:center;padding:40px 0">В этом разделе пока пусто.</p>
+
+        <div class="card" style="margin-top:22px;display:flex;flex-wrap:wrap;align-items:center;gap:16px;justify-content:space-between">
+          <div>
+            <h3 style="font-size:16px;margin-bottom:5px">Не нашли свой вопрос?</h3>
+            <p style="color:var(--muted);font-size:13.5px">Напишите — отвечу лично, обычно в течение суток.</p>
+          </div>
+          <a class="btn btn-cyan" href="https://t.me/botans_free" target="_blank" rel="noopener">Задать вопрос</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">BF</span>
+        <span class="brand-name">Botans<span>Free</span></span>
+      </a>
+      <nav class="foot-links">
+        <a href="catalog.html">Каталог</a>
+        <a href="vpn.html">VPN</a>
+        <a href="faq.html">FAQ</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+      <span>© 2026 · Разработка Telegram-ботов</span>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/tg.js"></script>
+  <script src="assets/luxury.js"></script>
+  <script>
+    // Фильтр по разделам. Открытые ответы при переключении схлопываем,
+    // иначе скрытый вопрос останется с выставленной max-height и «прыгнет»,
+    // когда его снова покажут.
+    (function () {
+      var items = document.querySelectorAll('.side-item');
+      var qs = document.querySelectorAll('#faq-list .acc-item');
+      var empty = document.getElementById('empty');
+
+      for (var i = 0; i < items.length; i++) {
+        items[i].addEventListener('click', function () {
+          var cat = this.getAttribute('data-cat');
+
+          for (var j = 0; j < items.length; j++) items[j].classList.remove('is-active');
+          this.classList.add('is-active');
+
+          var shown = 0;
+          for (var k = 0; k < qs.length; k++) {
+            var ok = cat === 'all' || qs[k].getAttribute('data-cat') === cat;
+            qs[k].hidden = !ok;
+            if (ok) {
+              shown++;
+            } else {
+              qs[k].classList.remove('is-open');
+              qs[k].querySelector('.acc-a').style.maxHeight = '';
+              qs[k].querySelector('.acc-q').setAttribute('aria-expanded', 'false');
+            }
+          }
+          empty.hidden = shown > 0;
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

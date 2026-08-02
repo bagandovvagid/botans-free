@@ -14,3 +14,12 @@ support-bot/.DS_Store
 
 # Claude Code локальные настройки
 .claude/
+
+# Сертификаты Let's Encrypt — приватные ключи, не публикуем
+deploy/certbot/
+
+# Python-кэш в корне
+__pycache__/
+
+# Временные файлы сессий Claude Code
+scratchpad/

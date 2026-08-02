@@ -21,22 +21,23 @@
   // Длинную страницу удобнее скроллить, если свайп вниз не закрывает приложение
   try { tg.disableVerticalSwipes && tg.disableVerticalSwipes(); } catch (e) {}
 
-  // Цвет шапки и фона под текущую тему сайта: светлые или тёмные обои
+  // Шапку и фон Telegram красим под фон сайта. У сайта две темы, поэтому
+  // цвет пересчитываем и при загрузке, и после клика по переключателю —
+  // иначе в светлой теме шапка Telegram остаётся чёрной.
   function syncTelegramColors() {
-    var dark = document.documentElement.classList.contains('dark');
-    var color = dark ? '#101b13' : '#6eb075';
+    var light = document.documentElement.getAttribute('data-theme') === 'light';
+    var color = light ? '#f7f6f4' : '#08090a';
     try { tg.setHeaderColor && tg.setHeaderColor(color); } catch (e) {}
     try { tg.setBackgroundColor && tg.setBackgroundColor(color); } catch (e) {}
   }
   syncTelegramColors();
-  document.addEventListener('bf:themechange', syncTelegramColors);
 
-  // Пользователь сменил тему в самом Telegram: если тема сайта вручную
-  // не выбиралась — следуем за Telegram
+  // Переключатель темы живёт в luxury.js и просто меняет data-theme на <html>,
+  // отдельного события не шлёт — поэтому следим за самим атрибутом
   try {
-    tg.onEvent && tg.onEvent('themeChanged', function () {
-      var t = window.siteTheme;
-      if (t && !t.saved()) t.apply(tg.colorScheme === 'dark');
+    new MutationObserver(syncTelegramColors).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
     });
   } catch (e) {}
 

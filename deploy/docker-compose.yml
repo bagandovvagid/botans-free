@@ -1,0 +1,39 @@
+version: "3.8"
+
+# Статичный сайт: nginx раздаёт HTML/картинки, certbot держит сертификат
+# свежим. Ни базы, ни бэкенда — на сайте нет авторизации и личных кабинетов,
+# заказы принимаются в Telegram по контактам с index.html.
+
+services:
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # Монтируем публичные файлы поимённо, а не корень репозитория — так
+      # наружу не попадёт ничего лишнего, даже если рядом появится файл,
+      # случайно подходящий под location.
+      - ../index.html:/usr/share/nginx/html/index.html:ro
+      - ../catalog.html:/usr/share/nginx/html/catalog.html:ro
+      - ../bot.html:/usr/share/nginx/html/bot.html:ro
+      - ../vpn.html:/usr/share/nginx/html/vpn.html:ro
+      - ../faq.html:/usr/share/nginx/html/faq.html:ro
+      - ../contacts.html:/usr/share/nginx/html/contacts.html:ro
+      - ../assets:/usr/share/nginx/html/assets:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+      - ./certbot/www:/var/www/certbot:ro
+
+  # Продлевает сертификат Let's Encrypt каждые 12 часов (сам certbot ничего
+  # не делает, пока до истечения больше 30 дней). Самый первый сертификат
+  # выпускается разово через init-letsencrypt.sh — см. комментарии там.
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    entrypoint: >
+      sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot; sleep 12h & wait $${!}; done'
