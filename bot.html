@@ -367,7 +367,9 @@
     };
 
     const slug = new URLSearchParams(location.search).get('bot');
-    const bot = BOTS[slug];
+    // Только собственные ключи каталога: ?bot=constructor и подобные
+    // значения из прототипа должны вести на «бот не найден», а не ронять скрипт
+    const bot = slug && Object.prototype.hasOwnProperty.call(BOTS, slug) ? BOTS[slug] : null;
     const page = document.getElementById('bot-page');
 
     if (!bot) {

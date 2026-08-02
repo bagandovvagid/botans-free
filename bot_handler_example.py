@@ -13,6 +13,7 @@
 """
 
 import json
+from html import escape
 
 from aiogram import F
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup, WebAppInfo
@@ -32,18 +33,25 @@ BOT_TITLES = {
 
 @dp.message(F.web_app_data)
 async def handle_lead(message: Message):
-    data = json.loads(message.web_app_data.data)
+    try:
+        data = json.loads(message.web_app_data.data)
+    except (json.JSONDecodeError, TypeError):
+        return
+    if not isinstance(data, dict):
+        return
 
     await message.answer("Заявка получена, свяжусь в течение дня")
 
-    # Себе — та же заявка в читаемом виде
+    # Себе — та же заявка в читаемом виде.
+    # Поля заявки пришли от пользователя: экранируем, иначе при parse_mode=HTML
+    # символ «<» в тексте сломает отправку и заявка не дойдёт
     await bot.send_message(
         ADMIN_ID,
         "Заявка с сайта\n"
-        f"Имя: {data.get('name', '—')}\n"
-        f"Ниша: {data.get('niche', '—')}\n"
-        f"Бот: {BOT_TITLES.get(data.get('bot_type', ''), data.get('bot_type'))}\n"
-        f"Комментарий: {data.get('comment') or '—'}\n"
+        f"Имя: {escape(str(data.get('name', '—')))}\n"
+        f"Ниша: {escape(str(data.get('niche', '—')))}\n"
+        f"Бот: {escape(str(BOT_TITLES.get(data.get('bot_type', ''), data.get('bot_type'))))}\n"
+        f"Комментарий: {escape(str(data.get('comment') or '—'))}\n"
         f"От: @{message.from_user.username or message.from_user.id}",
     )
 
