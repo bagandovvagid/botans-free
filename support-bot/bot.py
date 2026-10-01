@@ -1,8 +1,11 @@
 import asyncio
+import os
 import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
+from aiogram.client.session.aiohttp import AiohttpSession
+from aiogram.client.telegram import TelegramAPIServer
 from aiogram.enums import ParseMode
 
 from config import BOT_TOKEN
@@ -12,7 +15,9 @@ from handlers import menu
 async def main() -> None:
     logging.basicConfig(level=logging.INFO)
 
-    bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    # TG_API_BASE — адрес прокси до Bot API: из РФ api.telegram.org заблокирован с 30.09.2026.
+    session = AiohttpSession(api=TelegramAPIServer.from_base(os.getenv("TG_API_BASE") or "https://api.telegram.org"))
+    bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML), session=session)
     dp = Dispatcher()
     dp.include_router(menu.router)
 
