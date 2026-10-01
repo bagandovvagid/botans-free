@@ -17,12 +17,13 @@ async def main() -> None:
 
     # TG_API_BASE — адрес прокси до Bot API: из РФ api.telegram.org заблокирован с 30.09.2026.
     session = AiohttpSession(api=TelegramAPIServer.from_base(os.getenv("TG_API_BASE") or "https://api.telegram.org"))
+    session._connector_init["keepalive_timeout"] = 5  # простаивающие соединения до Cloudflare рвутся по дороге
     bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML), session=session)
     dp = Dispatcher()
     dp.include_router(menu.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot)
+    await dp.start_polling(bot, polling_timeout=int(os.getenv("TG_POLL_TIMEOUT") or 7))
 
 
 if __name__ == "__main__":
